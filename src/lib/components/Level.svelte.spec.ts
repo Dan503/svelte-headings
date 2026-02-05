@@ -5,8 +5,15 @@ import TestLevelNoElement from '../test-components/TestLevelNoElement.svelte';
 import TestLevelWithElement from '../test-components/TestLevelWithElement.svelte';
 import TestInfiniteLevels from '../test-components/TestInfiniteLevels.svelte';
 import TestCappedLevels from '../test-components/TestCappedLevels.svelte';
+import TestHWithoutLevel from '../test-components/TestHWithoutLevel.svelte';
 
 describe('Level component', () => {
+	it('should throw error when H is used without a parent Level', async () => {
+		expect(() => render(TestHWithoutLevel)).toThrow(
+			'[svelte-headings] <H> component must be used inside a <Level> component!'
+		);
+	});
+
 	it('should not render wrapper when no element prop is provided', async () => {
 		const { container } = render(TestLevelNoElement);
 

@@ -16,8 +16,12 @@
 					<Level>
 						<H>Heading Level 6</H>
 						<Level>
-							<!-- This will render as <h6 aria-level="7"> -->
-							<H>Heading Level 7 (renders as h6 with aria-level="7")</H>
+							<!-- This will render as <h6> (capped, no aria-level by default) -->
+							<H>Heading Level 7 (renders as h6, capped)</H>
+						</Level>
+						<Level infiniteLevels={true}>
+							<!-- This will render as <h6> (capped, no aria-level by default) -->
+							<H>Heading Level 7 (renders as h6, capped)</H>
 						</Level>
 					</Level>
 				</Level>

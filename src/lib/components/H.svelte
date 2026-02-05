@@ -1,12 +1,33 @@
 <!-- H.svelte -->
 <script lang="ts">
-	import { getContext } from 'svelte';
+	import { getContext, hasContext } from 'svelte';
 	import { LEVEL_KEY, INFINITE_LEVELS_KEY } from './context';
 	import type { HProps } from './types';
 
 	let { children, ...restProps }: HProps & { children?: any } = $props();
 
-	const level = getContext<number>(LEVEL_KEY) ?? 1;
+	// Check if H is used without a parent Level component
+	const hasLevelContext = hasContext(LEVEL_KEY);
+
+	if (!hasLevelContext) {
+		throw new Error(
+			`[svelte-headings] <H> component must be used inside a <Level> component!
+
+Without a parent <Level>, heading levels cannot be managed automatically.
+This can result in multiple <h1> elements on the page, which is an accessibility violation.
+
+Fix: Wrap your content in a <Level> component:
+
+  <Level>
+    <H>Your heading</H>
+    ...
+  </Level>
+
+See: https://github.com/Dan503/svelte-headings#readme`
+		);
+	}
+
+	const level = getContext<number>(LEVEL_KEY);
 	const infiniteLevels = getContext<boolean>(INFINITE_LEVELS_KEY) ?? false;
 
 	const tag = `h${Math.min(level, 6)}`;
