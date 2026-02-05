@@ -90,8 +90,57 @@ Output:
 <section class="container">
 	<h1>Main Heading</h1>
 	<p>Content under main heading</p>
+
 	<h2>Sub Heading</h2>
 	<p>Content under sub heading</p>
+</section>
+```
+
+### Level component With multiple child H components
+
+Placing two `<H>` components inside the same `<Level>` component will render the `<H>` components at the same level as each other
+
+```svelte
+<Level element="section">
+	<H>Main Heading</H>
+	<p>Content under main heading</p>
+
+	<Level>
+		<!-- renders <h2> -->
+		<H>Sub Heading A</H>
+		<p>Content under sub heading</p>
+
+		<!-- renders <h2> -->
+		<H>Sub Heading B</H>
+		<p>Content under sub heading</p>
+
+		<!-- Only <Level> components will increase the rendered level -->
+		<section>
+			<!-- renders <h2> -->
+			<H>Sub Heading C</H>
+			<p>Content under sub heading</p>
+		</section>
+	</Level>
+</Level>
+```
+
+Output:
+
+```html
+<section>
+	<h1>Main Heading</h1>
+	<p>Content under main heading</p>
+
+	<h2>Sub Heading A</h2>
+	<p>Content under sub heading</p>
+
+	<h2>Sub Heading B</h2>
+	<p>Content under sub heading</p>
+
+	<section>
+		<h2>Sub Heading C</h2>
+		<p>Content under sub heading</p>
+	</section>
 </section>
 ```
 
