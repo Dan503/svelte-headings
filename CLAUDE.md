@@ -15,11 +15,14 @@ This library provides two components (`Level` and `H`) that automatically manage
   - When no `element` prop, only increments the level context without rendering a wrapper (fragment-like behavior)
 
 - **`H`** (`src/lib/components/H.svelte`): Renders the appropriate heading tag (h1-h6) based on current nesting level
-  - For levels > 6, renders h6 with `aria-level` attribute and logs a warning
+  - For levels > 6, caps at h6 by default (no aria-level)
+  - When `infiniteLevels={true}` is set on root Level, adds `aria-level` attribute for levels > 6
 
 ### Context
 
-Uses Svelte's `setContext`/`getContext` with a Symbol key (`LEVEL_KEY`) to track heading depth through component hierarchy.
+Uses Svelte's `setContext`/`getContext` with Symbol keys to track:
+- `LEVEL_KEY` - Current heading depth through component hierarchy
+- `INFINITE_LEVELS_KEY` - Whether to use aria-level for deep nesting (set on root Level, inherited by children)
 
 ## Usage Example
 
@@ -79,6 +82,7 @@ Output:
 
 - `src/lib/components/Level.svelte` - Level context component
 - `src/lib/components/H.svelte` - Heading component
+- `src/lib/components/context.ts` - Context keys (LEVEL_KEY, INFINITE_LEVELS_KEY)
 - `src/lib/components/types.ts` - TypeScript interfaces
 - `src/lib/index.ts` - Public exports
 - `src/routes/+page.svelte` - Demo page

@@ -1,20 +1,34 @@
 <!-- H.svelte -->
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import { LEVEL_KEY } from './context';
+	import { LEVEL_KEY, INFINITE_LEVELS_KEY } from './context';
 	import type { HProps } from './types';
 
 	let { children, ...restProps }: HProps & { children?: any } = $props();
 
 	const level = getContext<number>(LEVEL_KEY) ?? 1;
-	const ariaLevel = level > 6 ? level : undefined;
+	const infiniteLevels = getContext<boolean>(INFINITE_LEVELS_KEY) ?? false;
+
 	const tag = `h${Math.min(level, 6)}`;
+
+	// Only use aria-level if infiniteLevels is enabled
+	const ariaLevel = infiniteLevels && level > 6 ? level : undefined;
+
 	if (level > 6) {
-		console.warn(
-			`Heading level ${level} is greater than 6. Using <${tag}> with aria-level="${ariaLevel}".
-This is not supported in all screen readers.
-Please restructure your content to use heading levels 1-6 for better accessibility.`
-		);
+		if (infiniteLevels) {
+			console.warn(
+				`Heading level ${level} is greater than 6. Using <${tag}> with aria-level="${level}".
+Note: aria-level is not supported by all screen readers.
+Consider restructuring your content to use heading levels 1-6 for better accessibility.`
+			);
+		} else {
+			console.warn(
+				`Heading level ${level} is greater than 6. Capping at <${tag}>.
+Consider restructuring your content to use heading levels 1-6.
+To enable aria-level for deeper nesting, add infiniteLevels={true} to your root <Level> component.
+Note: aria-level > 6 is not supported by all screen readers.`
+			);
+		}
 	}
 </script>
 
