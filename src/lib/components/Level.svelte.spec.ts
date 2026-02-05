@@ -1,10 +1,10 @@
 import { page } from 'vitest/browser';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import TestLevelNoElement from './TestLevelNoElement.svelte';
-import TestLevelWithElement from './TestLevelWithElement.svelte';
-import TestInfiniteLevels from './TestInfiniteLevels.svelte';
-import TestCappedLevels from './TestCappedLevels.svelte';
+import TestLevelNoElement from '../test-components/TestLevelNoElement.svelte';
+import TestLevelWithElement from '../test-components/TestLevelWithElement.svelte';
+import TestInfiniteLevels from '../test-components/TestInfiniteLevels.svelte';
+import TestCappedLevels from '../test-components/TestCappedLevels.svelte';
 
 describe('Level component', () => {
 	it('should not render wrapper when no element prop is provided', async () => {

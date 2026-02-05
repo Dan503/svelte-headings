@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Level from './Level.svelte';
-	import H from './H.svelte';
+	import Level from '../components/Level.svelte';
+	import H from '../components/H.svelte';
 </script>
 
-<Level element="section" infiniteLevels={true}>
+<Level element="section">
 	<H>Level 1</H>
 	<Level>
 		<H>Level 2</H>
