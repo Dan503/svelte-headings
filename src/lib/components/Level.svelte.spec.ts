@@ -10,6 +10,7 @@ import TestInfiniteLevelsNested from '../test-components/TestInfiniteLevelsNeste
 import TestInfiniteLevelsOverride from '../test-components/TestInfiniteLevelsOverride.svelte';
 import TestMultipleH1 from '../test-components/TestMultipleH1.svelte';
 import TestSiblingHeadings from '../test-components/TestSiblingHeadings.svelte';
+import TestClassOnLevelWithNoElementProp from '../test-components/TestClassOnLevelWithNoElementProp.svelte';
 
 describe('Level component', () => {
 	it('should throw error when H is used without a parent Level', async () => {
@@ -117,6 +118,18 @@ describe('Level component', () => {
 			// Need to wait for onMount to run
 			await new Promise((resolve) => setTimeout(resolve, 0));
 		}).rejects.toThrow('[svelte-headings] Multiple <h1> elements detected on the page!');
+	});
+
+	it('should render a div if Level has props other than `element` applied to it', async () => {
+		const { container } = render(TestClassOnLevelWithNoElementProp);
+
+		// We should have a div with class "level-1" wrapping the h1
+		const wrapperDiv = container.querySelector('div.level-1');
+		expect(wrapperDiv).not.toBeNull();
+
+		const h1 = wrapperDiv?.querySelector(':scope > h1');
+		expect(h1).not.toBeNull();
+		await expect.element(page.getByText('First H1')).toBeInTheDocument();
 	});
 
 	it('should render sibling H components at the same heading level', async () => {

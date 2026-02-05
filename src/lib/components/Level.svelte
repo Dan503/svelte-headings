@@ -1,15 +1,11 @@
 <!-- Level.svelte -->
 <script lang="ts">
-	import { setContext, getContext, untrack } from 'svelte';
+	import { setContext, getContext, untrack, type Snippet } from 'svelte';
 	import { LEVEL_KEY, INFINITE_LEVELS_KEY } from './context';
-	import type { LevelProps } from './types';
+	import type { LevelElement, LevelProps } from './types';
 
-	const {
-		element,
-		infiniteLevels,
-		children,
-		...restProps
-	}: LevelProps & { children?: any } = $props();
+	const { element, infiniteLevels, children, ...restProps }: LevelProps & { children?: Snippet } =
+		$props();
 
 	const parentLevel = getContext<number>(LEVEL_KEY) ?? 0;
 	const currentLevel = parentLevel + 1;
@@ -31,10 +27,16 @@
 	});
 
 	setContext(LEVEL_KEY, currentLevel);
+
+	const restPropsCount = $derived(Object.keys(restProps).length);
+
+	const finalElement: LevelElement | undefined = $derived(
+		element ?? (restPropsCount > 0 ? 'div' : undefined)
+	);
 </script>
 
-{#if element}
-	<svelte:element this={element} {...restProps}>
+{#if finalElement}
+	<svelte:element this={finalElement} {...restProps}>
 		{@render children?.()}
 	</svelte:element>
 {:else}

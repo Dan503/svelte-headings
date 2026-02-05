@@ -47,7 +47,7 @@ npm install svelte-headings
 </Level>
 ```
 
-Output:
+**Output:**
 
 ```html
 <main>
@@ -84,7 +84,7 @@ When you need to increment the heading level without adding a wrapper element, o
 </Level>
 ```
 
-Output:
+**Output:**
 
 ```html
 <section class="container">
@@ -94,6 +94,27 @@ Output:
 	<h2>Sub Heading</h2>
 	<p>Content under sub heading</p>
 </section>
+```
+
+### Level defaults to div when attributes are added
+
+Adding a class or any other standard HTML attribute to the `Level` component will automatically render a div by default without having to specify `div` explicitly as the `element`.
+
+```svelte
+<!-- Level `element` will default to "div" if any attributes are applied to it. -->
+<Level class="container">
+	<H>Heading</H>
+	<p>Content under heading</p>
+</Level>
+```
+
+**Output:**
+
+```html
+<div class="container">
+	<h1>Heading</h1>
+	<p>Content under heading</p>
+</div>
 ```
 
 ### Level component With multiple child H components
@@ -124,7 +145,7 @@ Placing two `<H>` components inside the same `<Level>` component will render the
 </Level>
 ```
 
-Output:
+**Output:**
 
 ```html
 <section>

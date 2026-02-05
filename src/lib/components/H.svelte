@@ -1,10 +1,10 @@
 <!-- H.svelte -->
 <script lang="ts">
-	import { getContext, hasContext, onMount } from 'svelte';
+	import { getContext, hasContext, onMount, type Snippet } from 'svelte';
 	import { LEVEL_KEY, INFINITE_LEVELS_KEY } from './context';
 	import type { HProps } from './types';
 
-	let { children, ...restProps }: HProps & { children?: any } = $props();
+	let { children, ...restProps }: HProps & { children?: Snippet } = $props();
 
 	// Check if H is used without a parent Level component
 	const hasLevelContext = hasContext(LEVEL_KEY);
