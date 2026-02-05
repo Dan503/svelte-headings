@@ -1,8 +1,19 @@
 {
 	"name": "svelte-headings",
 	"private": true,
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
+	"author": {
+		"name": "Daniel Tonon"
+	},
+	"repository": {
+		"url": "https://github.com/Dan503/svelte-headings.git",
+		"type": "github"
+	},
+	"bugs": {
+		"url": "https://github.com/Dan503/svelte-headings/issues"
+	},
+	"license": "Apache-2.0",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
