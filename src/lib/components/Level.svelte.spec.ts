@@ -8,6 +8,8 @@ import TestCappedLevels from '../test-components/TestCappedLevels.svelte';
 import TestHWithoutLevel from '../test-components/TestHWithoutLevel.svelte';
 import TestInfiniteLevelsNested from '../test-components/TestInfiniteLevelsNested.svelte';
 import TestInfiniteLevelsOverride from '../test-components/TestInfiniteLevelsOverride.svelte';
+import TestMultipleH1 from '../test-components/TestMultipleH1.svelte';
+import TestSiblingHeadings from '../test-components/TestSiblingHeadings.svelte';
 
 describe('Level component', () => {
 	it('should throw error when H is used without a parent Level', async () => {
@@ -107,5 +109,39 @@ describe('Level component', () => {
 		await expect.element(page.getByText('Level 7 Inherited True')).toBeInTheDocument();
 		await expect.element(page.getByText('Level 7 Overridden False')).toBeInTheDocument();
 		await expect.element(page.getByText('Level 9 Inherited False')).toBeInTheDocument();
+	});
+
+	it('should throw error when multiple h1 elements are detected', async () => {
+		await expect(async () => {
+			render(TestMultipleH1);
+			// Need to wait for onMount to run
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		}).rejects.toThrow('[svelte-headings] Multiple <h1> elements detected on the page!');
+	});
+
+	it('should render sibling H components at the same heading level', async () => {
+		const { container } = render(TestSiblingHeadings);
+
+		// The single h1
+		const h1 = container.querySelector('h1.level-1');
+		expect(h1).not.toBeNull();
+		expect(h1?.tagName).toBe('H1');
+
+		// All three sibling headings should be h2
+		const firstH2 = container.querySelector('h2.level-2-first');
+		const secondH2 = container.querySelector('h2.level-2-second');
+		const thirdH2 = container.querySelector('h2.level-2-third');
+
+		expect(firstH2).not.toBeNull();
+		expect(secondH2).not.toBeNull();
+		expect(thirdH2).not.toBeNull();
+
+		expect(firstH2?.tagName).toBe('H2');
+		expect(secondH2?.tagName).toBe('H2');
+		expect(thirdH2?.tagName).toBe('H2');
+
+		await expect.element(page.getByText('First H2')).toBeInTheDocument();
+		await expect.element(page.getByText('Second H2')).toBeInTheDocument();
+		await expect.element(page.getByText('Third H2')).toBeInTheDocument();
 	});
 });

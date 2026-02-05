@@ -1,6 +1,6 @@
 <!-- H.svelte -->
 <script lang="ts">
-	import { getContext, hasContext } from 'svelte';
+	import { getContext, hasContext, onMount } from 'svelte';
 	import { LEVEL_KEY, INFINITE_LEVELS_KEY } from './context';
 	import type { HProps } from './types';
 
@@ -51,6 +51,32 @@ Note: aria-level > 6 is not supported by all screen readers.`
 			);
 		}
 	}
+
+	// Check for multiple h1 elements after mount (catches both <H> components and hardcoded <h1> tags)
+	onMount(() => {
+		if (level === 1) {
+			const h1Elements = document.querySelectorAll('h1');
+			if (h1Elements.length > 1) {
+				throw new Error(
+					`[svelte-headings] Multiple <h1> elements detected on the page!
+
+Found ${h1Elements.length} <h1> elements. A page should only have one <h1> for proper accessibility and SEO.
+
+This usually happens when:
+- Multiple top-level <Level> components each contain an <H> component
+- An <H> is used at level 1 in multiple places
+- A hardcoded <h1> tag exists alongside an <H> component
+
+Fix:
+- Have a <Level> component wrap the whole site.
+- Do not hardcode any <h1> tags, instead rely on the <H> component.
+- Only have 1 <H> component as a direct child of the first <Level> component.
+
+See: https://github.com/Dan503/svelte-headings#readme`
+				);
+			}
+		}
+	});
 </script>
 
 <svelte:element this={tag} aria-level={ariaLevel} {...restProps}>
