@@ -24,7 +24,8 @@ export interface LevelProps extends HTMLAttributes<HTMLElement> {
 	/**
 	 * When true, enables aria-level attributes for heading levels > 6.
 	 *
-	 * Only applies when set on the top-level Level component.
+	 * Can be set on any Level component. The setting is inherited by all
+	 * nested Level components unless explicitly overridden.
 	 *
 	 * @default false // (caps at h6 without aria-level)
 	 */

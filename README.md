@@ -149,11 +149,11 @@ Create components that automatically use the correct heading level based on wher
 
 Creates a new heading level context. Each nested `Level` increments the heading depth by 1.
 
-| Prop             | Type      | Default     | Description                                                                                                                     |
-| ---------------- | --------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `element`        | `string`  | `undefined` | HTML element to render (`section`, `article`, `div`, etc.). If omitted, no wrapper is rendered.                                 |
-| `infiniteLevels` | `boolean` | `false`     | When `true` on the root Level, enables `aria-level` attributes for heading levels > 6. Only effective on the top-level Level.  |
-| `...rest`        |           |             | All other props are passed to the wrapper element                                                                               |
+| Prop             | Type      | Default     | Description                                                                                                                                        |
+| ---------------- | --------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `element`        | `string`  | `undefined` | HTML element to render (`section`, `article`, `div`, etc.). If omitted, no wrapper is rendered.                                                    |
+| `infiniteLevels` | `boolean` | `false`     | When `true`, enables `aria-level` attributes for heading levels > 6. Can be set on any Level; the setting is inherited by nested Level components. |
+| `...rest`        |           |             | All other props are passed to the wrapper element                                                                                                  |
 
 Supported elements: `div`, `section`, `article`, `aside`, `nav`, `header`, `footer`, `main`, `figure`, `figcaption`, `details`, `summary`
 
@@ -184,7 +184,7 @@ By default, headings are capped at `<h6>` when nesting exceeds 6 levels:
 
 ### Enabling `aria-level` for Deep Nesting
 
-For documents that genuinely require more than 6 heading levels (e.g., legal or academic content), you can enable `aria-level` attributes by adding `infiniteLevels={true}` to your root `Level` component:
+For documents that genuinely require more than 6 heading levels (e.g., legal or academic content), you can enable `aria-level` attributes by adding `infiniteLevels={true}` to any `Level` component:
 
 ```svelte
 <Level element="main" infiniteLevels={true}>
@@ -192,6 +192,22 @@ For documents that genuinely require more than 6 heading levels (e.g., legal or 
 	<Level>
 		<H>Level 7 Heading</H>
 		<!-- renders: <h6 aria-level="7">Level 7 Heading</h6> -->
+	</Level>
+</Level>
+```
+
+You can also enable it selectively for specific branches:
+
+```svelte
+<Level element="main">
+	<!-- ... 6 levels deep ... -->
+	<Level>
+		<H>Level 7 (capped at h6)</H>
+		<!-- renders: <h6>Level 7 (capped at h6)</h6> -->
+	</Level>
+	<Level infiniteLevels={true}>
+		<H>Level 7 (with aria-level)</H>
+		<!-- renders: <h6 aria-level="7">Level 7 (with aria-level)</h6> -->
 	</Level>
 </Level>
 ```

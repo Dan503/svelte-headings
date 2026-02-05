@@ -6,6 +6,8 @@ import TestLevelWithElement from '../test-components/TestLevelWithElement.svelte
 import TestInfiniteLevels from '../test-components/TestInfiniteLevels.svelte';
 import TestCappedLevels from '../test-components/TestCappedLevels.svelte';
 import TestHWithoutLevel from '../test-components/TestHWithoutLevel.svelte';
+import TestInfiniteLevelsNested from '../test-components/TestInfiniteLevelsNested.svelte';
+import TestInfiniteLevelsOverride from '../test-components/TestInfiniteLevelsOverride.svelte';
 
 describe('Level component', () => {
 	it('should throw error when H is used without a parent Level', async () => {
@@ -65,5 +67,45 @@ describe('Level component', () => {
 		expect(level7Heading).not.toBeNull();
 		expect(level7Heading?.getAttribute('aria-level')).toBeNull();
 		await expect.element(page.getByText('Level 7')).toBeInTheDocument();
+	});
+
+	it('should allow infiniteLevels to be set on nested Level components', async () => {
+		const { container } = render(TestInfiniteLevelsNested);
+
+		// The capped heading should NOT have aria-level
+		const cappedHeading = container.querySelector('h6.capped');
+		expect(cappedHeading).not.toBeNull();
+		expect(cappedHeading?.getAttribute('aria-level')).toBeNull();
+
+		// The infinite heading SHOULD have aria-level="7"
+		const infiniteHeading = container.querySelector('h6.infinite');
+		expect(infiniteHeading).not.toBeNull();
+		expect(infiniteHeading?.getAttribute('aria-level')).toBe('7');
+
+		await expect.element(page.getByText('Level 7 Capped')).toBeInTheDocument();
+		await expect.element(page.getByText('Level 7 Infinite')).toBeInTheDocument();
+	});
+
+	it('should allow infiniteLevels={false} to override parent infiniteLevels={true}', async () => {
+		const { container } = render(TestInfiniteLevelsOverride);
+
+		// Heading that inherits true from root SHOULD have aria-level
+		const inheritedTrueHeading = container.querySelector('h6.inherited-true');
+		expect(inheritedTrueHeading).not.toBeNull();
+		expect(inheritedTrueHeading?.getAttribute('aria-level')).toBe('7');
+
+		// Heading where parent explicitly set false should NOT have aria-level
+		const overriddenFalseHeading = container.querySelector('h6.overridden-false');
+		expect(overriddenFalseHeading).not.toBeNull();
+		expect(overriddenFalseHeading?.getAttribute('aria-level')).toBeNull();
+
+		// Heading nested below the false override should inherit false, NOT true from root
+		const inheritedFalseHeading = container.querySelector('h6.inherited-false');
+		expect(inheritedFalseHeading).not.toBeNull();
+		expect(inheritedFalseHeading?.getAttribute('aria-level')).toBeNull();
+
+		await expect.element(page.getByText('Level 7 Inherited True')).toBeInTheDocument();
+		await expect.element(page.getByText('Level 7 Overridden False')).toBeInTheDocument();
+		await expect.element(page.getByText('Level 9 Inherited False')).toBeInTheDocument();
 	});
 });

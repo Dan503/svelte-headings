@@ -17,11 +17,12 @@
 	// Check if infiniteLevels was set by a parent Level
 	const parentInfiniteLevels = getContext<boolean>(INFINITE_LEVELS_KEY);
 
-	// Only set the context if this is the top level (no parent) and infiniteLevels is explicitly set
+	// If infiniteLevels is explicitly set on this Level, use it
 	// Otherwise, inherit from parent
 	// Using untrack() since we intentionally only want the initial value for context setup
 	untrack(() => {
-		if (parentLevel === 0 && infiniteLevels !== undefined) {
+		if (infiniteLevels !== undefined) {
+			// Explicit value on this Level takes precedence
 			setContext(INFINITE_LEVELS_KEY, infiniteLevels);
 		} else if (parentInfiniteLevels !== undefined) {
 			// Propagate parent setting
