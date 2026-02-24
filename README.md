@@ -20,28 +20,41 @@ npm install svelte-headings
 
 ## Usage
 
-### Basic Example
+### Full Feature Example
 
 ```svelte
 <script>
 	import { Level, H } from 'svelte-headings';
 </script>
 
+<!-- renders <main> -->
 <Level element="main">
 	<!-- renders <h1> -->
 	<H>Page Title</H>
 	<p>Introduction text...</p>
 
+	<!-- renders <section class="container"> -->
 	<Level element="section" class="container">
 		<!-- renders <h2> -->
 		<H>Section Title</H>
 		<p>Section content...</p>
 
-		<Level element="article">
+		<!-- renders no wrapper element -->
+		<Level>
 			<!-- renders <h3> -->
-			<H>Article Title</H>
+			<H>Subheading A</H>
+			<p>Subheading A content...</p>
+
 			<!-- renders <h3> -->
-			<p>Article content...</p>
+			<H>Subheading B</H>
+			<p>Subheading B content...</p>
+		</Level>
+
+		<!-- renders <div class="wrapper"> -->
+		<Level class="wrapper">
+			<!-- renders <h3> -->
+			<H>Div Heading</H>
+			<p>Div content...</p>
 		</Level>
 	</Level>
 </Level>
@@ -58,10 +71,16 @@ npm install svelte-headings
 		<h2>Section Title</h2>
 		<p>Section content...</p>
 
-		<article>
-			<h3>Article Title</h3>
-			<p>Article content...</p>
-		</article>
+		<h3>Subheading A</h3>
+		<p>Subheading A content...</p>
+
+		<h3>Subheading B</h3>
+		<p>Subheading B content...</p>
+
+		<div class="wrapper">
+			<h3>Div Heading</h3>
+			<p>Div content...</p>
+		</div>
 	</section>
 </main>
 ```
@@ -123,6 +142,7 @@ Placing two `<H>` components inside the same `<Level>` component will render the
 
 ```svelte
 <Level element="section">
+	<!-- renders <h1> -->
 	<H>Main Heading</H>
 	<p>Content under main heading</p>
 
@@ -246,8 +266,8 @@ By default, headings are capped at `<h6>` when nesting exceeds 6 levels:
 <Level element="main">
 	<!-- ... 6 levels deep ... -->
 	<Level>
-		<H>Level 7 Heading</H>
 		<!-- renders: <h6>Level 7 Heading</h6> -->
+		<H>Level 7 Heading</H>
 	</Level>
 </Level>
 ```
@@ -260,8 +280,8 @@ For documents that genuinely require more than 6 heading levels (e.g., legal or 
 <Level element="main" infiniteLevels={true}>
 	<!-- ... 6 levels deep ... -->
 	<Level>
-		<H>Level 7 Heading</H>
 		<!-- renders: <h6 aria-level="7">Level 7 Heading</h6> -->
+		<H>Level 7 Heading</H>
 	</Level>
 </Level>
 ```
@@ -272,12 +292,12 @@ You can also enable it selectively for specific branches:
 <Level element="main">
 	<!-- ... 6 levels deep ... -->
 	<Level>
-		<H>Level 7 (capped at h6)</H>
 		<!-- renders: <h6>Level 7 (capped at h6)</h6> -->
+		<H>Level 7 (capped at h6)</H>
 	</Level>
 	<Level infiniteLevels={true}>
-		<H>Level 7 (with aria-level)</H>
 		<!-- renders: <h6 aria-level="7">Level 7 (with aria-level)</h6> -->
+		<H>Level 7 (with aria-level)</H>
 	</Level>
 </Level>
 ```
